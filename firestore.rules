@@ -1,0 +1,132 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId}
+    // Fields:
+    //   - uid: string (required) - The user's unique ID.
+    //   - displayName: string (optional) - The user's display name.
+    //   - email: string (required, email format) - The user's email address.
+    //   - photoURL: string (optional, uri format) - The user's profile photo URL.
+    //   - xp: number (optional) - The user's experience points.
+    //   - seeds: number (optional) - The user's digital seeds count.
+    //   - role: string (required, enum: ['user', 'admin']) - The user's role.
+    //   - createdAt: timestamp (optional) - When the user was created.
+    //
+    // Collection: users/{userId}/orders
+    // Document ID: {orderId}
+    // Fields:
+    //   - uid: string (required) - The user's ID who placed the order.
+    //   - productId: string (required) - The ID of the product purchased.
+    //   - productName: string (required) - The name of the product.
+    //   - price: number (required) - The price paid.
+    //   - status: string (required) - The order status (pending, completed, etc.).
+    //   - createdAt: timestamp (required) - When the order was placed.
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+          (request.auth.token.email == "techwhisperer420@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string &&
+        email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUrl(url) {
+      return url is string &&
+        (url.matches("^https://.*") || url.matches("^http://.*"));
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUser(data) {
+      return hasRequiredFields(['uid', 'email', 'role']) &&
+             hasOnlyAllowedFields(['uid', 'displayName', 'email', 'photoURL', 'xp', 'seeds', 'role', 'createdAt']) &&
+             data.uid == request.auth.uid &&
+             isValidEmail(data.email) &&
+             (data.role == 'user' || data.role == 'admin') &&
+             (!('photoURL' in data) || isValidUrl(data.photoURL)) &&
+             (!('displayName' in data) || (data.displayName is string && data.displayName.size() < 100)) &&
+             (!('xp' in data) || data.xp is number) &&
+             (!('seeds' in data) || data.seeds is number);
+    }
+
+    function isValidOrder(data) {
+      return hasRequiredFields(['uid', 'productId', 'productName', 'price', 'status', 'createdAt']) &&
+             hasOnlyAllowedFields(['uid', 'productId', 'productName', 'price', 'status', 'createdAt']) &&
+             data.uid == request.auth.uid &&
+             data.productId is string &&
+             data.productName is string && data.productName.size() < 200 &&
+             data.price is number && data.price >= 0 &&
+             data.status is string && data.status.size() < 50 &&
+             data.createdAt is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /users/{userId} {
+      // Users can only read their own profile. Admins can read all profiles.
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // Users can create their own profile as 'user'. Admins can create any profile.
+      allow create: if isAuthenticated() && isValidUser(request.resource.data) && 
+                    ((isOwner(userId) && request.resource.data.role == 'user') || isAdmin());
+      
+      // Users can update their own profile, but cannot change their role. Admins can update any profile.
+      allow update: if isAuthenticated() && isValidUser(request.resource.data) && 
+                    ((isOwner(userId) && request.resource.data.role == resource.data.role) || isAdmin());
+      
+      // Only admins can delete profiles.
+      allow delete: if isAdmin();
+
+      match /orders/{orderId} {
+        // Users can only read their own orders. Admins can read all orders.
+        allow read: if isOwner(userId) || isAdmin();
+        
+        // Users can create their own orders.
+        allow create: if isOwner(userId) && isValidOrder(request.resource.data);
+        
+        // Orders are immutable for users. Admins can update/delete.
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // Default deny
+    match /{path=**} {
+      allow read, write: if false;
+    }
+  }
+}

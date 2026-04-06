@@ -1,0 +1,5 @@
+{
+  "name": "GanjaGuru - The Socket",
+  "description": "An AI-powered cannabis metaverse and one-stop hemp shop. Seed to smoke, end-to-end, gravity-defying interface.",
+  "requestFramePermissions": ["microphone"]
+}
