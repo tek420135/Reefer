@@ -22,11 +22,11 @@ export default function SlangSearch() {
   }, [isOpen]);
 
   const suggestions = [
-    'How to grow sticky icky?',
-    'Best 3D printed bongs?',
-    'Where is the nearest plug?',
-    'Eco-friendly rolling papers',
-    'Snoop mode activation',
+    'How to optimize my eco-grid?',
+    'Best 3D printed grow tools?',
+    'Eco-friendly sustainable sourcing',
+    'Neural sync activation',
+    'Automated grow room design',
   ];
 
   return (
@@ -53,7 +53,7 @@ export default function SlangSearch() {
                   autoFocus
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Ask the GanjaGuru... (Press ESC to close)"
+                  placeholder="Ask the AI Consultant... (Press ESC to close)"
                   className="w-full bg-white/5 border-none rounded-2xl py-4 pl-12 pr-12 focus:outline-none focus:ring-2 focus:ring-cannabis-light text-lg font-sans"
                 />
                 <button 

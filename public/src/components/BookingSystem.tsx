@@ -1,19 +1,43 @@
 import React, { useState } from 'react';
 import { Calendar as CalendarIcon, Clock, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { auth, db, handleFirestoreError, OperationType } from '../firebase';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { useSocketContext } from '../context/SocketContext';
 import { cn } from '@/src/lib/utils';
 
 export default function BookingSystem() {
+  const { notify, addXp } = useSocketContext();
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [isBooked, setIsBooked] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const times = ['10:00 AM', '11:30 AM', '01:00 PM', '02:30 PM', '04:20 PM', '06:00 PM'];
 
-  const handleBook = () => {
+  const handleBook = async () => {
     if (selectedDate && selectedTime) {
-      setIsBooked(true);
-      setTimeout(() => setIsBooked(false), 3000);
+      setLoading(true);
+      try {
+        if (auth.currentUser) {
+          await addDoc(collection(db, 'users', auth.currentUser.uid, 'bookings'), {
+            date: `2026-04-${selectedDate.toString().padStart(2, '0')}`,
+            time: selectedTime,
+            consultant: 'THE PLUG (SENIOR GURU)',
+            createdAt: serverTimestamp(),
+            status: 'confirmed'
+          });
+        }
+        
+        setIsBooked(true);
+        notify("CONSULTATION SECURED IN THE GRID");
+        addXp(150);
+        setTimeout(() => setIsBooked(false), 3000);
+      } catch (err) {
+        handleFirestoreError(err, OperationType.CREATE, `users/${auth.currentUser?.uid}/bookings`);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -83,7 +107,7 @@ export default function BookingSystem() {
           
           <button
             onClick={handleBook}
-            disabled={!selectedDate || !selectedTime}
+            disabled={!selectedDate || !selectedTime || loading}
             className={cn(
               "w-full py-4 rounded-2xl font-black transition-all flex items-center justify-center gap-2",
               isBooked 
@@ -91,7 +115,7 @@ export default function BookingSystem() {
                 : "bg-money-gold text-money-green hover:scale-105 shadow-xl disabled:opacity-30 disabled:cursor-not-allowed"
             )}
           >
-            {isBooked ? <><CheckCircle2 size={20} /> BOOKED!</> : 'SECURE THE SLOT'}
+            {loading ? 'SYNCING...' : (isBooked ? <><CheckCircle2 size={20} /> BOOKED!</> : 'SECURE THE SLOT')}
           </button>
         </div>
       </div>

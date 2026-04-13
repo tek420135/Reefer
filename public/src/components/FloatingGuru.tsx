@@ -7,11 +7,11 @@ export default function FloatingGuru() {
   const [tip, setTip] = useState<string | null>(null);
 
   const tips = [
-    "Check the Live Grid for real-time grow stats.",
-    "Press '/' to search the grid's slang.",
+    "Check the Grow Analytics for real-time stats.",
+    "Press '/' to search the grid's neural paths.",
     "Switch vibes to change the energy of the Socket.",
-    "Design your own gear in the 3D Studio.",
-    "Book a consultation with a master in The Plug."
+    "Remix community blueprints in the Social Forge.",
+    "Track your eco-impact inside The Vault."
   ];
 
   const showTip = () => {
@@ -31,7 +31,7 @@ export default function FloatingGuru() {
             className="absolute bottom-full left-0 mb-4 w-48 p-4 glass-morphism rounded-2xl border border-cannabis-light/30 shadow-2xl"
           >
             <p className="text-[10px] font-mono text-cannabis-light uppercase mb-2 flex items-center gap-1">
-              <Sparkles size={10} /> Guru Tip
+              <Sparkles size={10} /> Neural Tip
             </p>
             <p className="text-xs text-white/80 leading-relaxed">{tip}</p>
             <div className="absolute -bottom-2 left-6 w-4 h-4 bg-black/40 border-r border-b border-white/10 rotate-45" />
@@ -48,7 +48,7 @@ export default function FloatingGuru() {
         <div className="w-full h-full rounded-full bg-black flex items-center justify-center overflow-hidden relative">
           <img 
             src="https://picsum.photos/seed/guru-avatar/100/100" 
-            alt="GanjaGuru" 
+            alt="AI Consultant" 
             className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
             referrerPolicy="no-referrer"
           />

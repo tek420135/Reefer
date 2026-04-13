@@ -137,17 +137,29 @@ export default function GanjaGuruChat() {
   return (
     <div className="flex flex-col h-[600px] w-full max-w-4xl mx-auto glass-morphism rounded-3xl overflow-hidden wacky-border shadow-2xl relative z-10">
       {/* Header */}
-      <div className="p-4 border-b border-white/10 flex items-center justify-between bg-cannabis-dark/20">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-cannabis-light rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(163,230,53,0.5)]">
+      <div className="p-4 border-b border-white/10 flex items-center justify-between bg-cannabis-dark/20 relative overflow-hidden">
+        {/* Neural Link Animation */}
+        <motion.div 
+          animate={{ x: ['-100%', '100%'] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+          className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cannabis-light to-transparent opacity-30"
+        />
+        
+        <div className="flex items-center gap-3 relative z-10">
+          <div className="w-10 h-10 bg-cannabis-light rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(163,230,53,0.5)] relative">
             <Leaf className="text-cannabis-dark" size={24} />
+            <motion.div 
+              animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="absolute inset-0 rounded-full border border-cannabis-light"
+            />
           </div>
           <div>
-            <h3 className="font-display font-bold text-cannabis-light text-lg">GanjaGuru AI</h3>
-            <p className="text-xs text-white/50 font-mono">The Socket is Live • Seed to Smoke</p>
+            <h3 className="font-display font-bold text-cannabis-light text-lg">AI Consultant</h3>
+            <p className="text-xs text-white/50 font-mono">Eco-Grid Sync: Active • {messages.length} Packets Synced</p>
           </div>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 relative z-10">
           <div className="w-2 h-2 bg-cannabis-light rounded-full animate-pulse" />
           <div className="w-2 h-2 bg-money-gold rounded-full animate-pulse delay-75" />
           <div className="w-2 h-2 bg-curiosity-purple rounded-full animate-pulse delay-150" />
@@ -162,8 +174,8 @@ export default function GanjaGuruChat() {
         {messages.length === 0 && (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-60">
             <Sparkles className="text-money-gold w-12 h-12 animate-bounce" />
-            <h4 className="text-2xl font-jazzy italic">"What's the word on the street, fam?"</h4>
-            <p className="max-w-xs text-sm">Upload blueprints, ask about grow designs, or just vibe with the GanjaGuru.</p>
+            <h4 className="text-2xl font-jazzy italic">"How can I optimize your eco-grid today?"</h4>
+            <p className="max-w-xs text-sm">Upload blueprints, ask about sustainable grow designs, or consult on automated cultivation.</p>
           </div>
         )}
         
@@ -206,12 +218,16 @@ export default function GanjaGuruChat() {
 
         {isTyping && (
           <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex items-center gap-2 text-cannabis-light font-mono text-xs"
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3 text-cannabis-light font-mono text-[10px] uppercase tracking-widest"
           >
-            <Loader2 className="animate-spin" size={14} />
-            GanjaGuru is rolling up a response...
+            <div className="flex gap-1">
+              <motion.div animate={{ opacity: [0, 1, 0] }} transition={{ duration: 0.5, repeat: Infinity }} className="w-1 h-3 bg-cannabis-light" />
+              <motion.div animate={{ opacity: [0, 1, 0] }} transition={{ duration: 0.5, repeat: Infinity, delay: 0.2 }} className="w-1 h-3 bg-cannabis-light" />
+              <motion.div animate={{ opacity: [0, 1, 0] }} transition={{ duration: 0.5, repeat: Infinity, delay: 0.4 }} className="w-1 h-3 bg-cannabis-light" />
+            </div>
+            <span>Deciphering the eco-frequency...</span>
           </motion.div>
         )}
       </div>
@@ -243,7 +259,7 @@ export default function GanjaGuruChat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Spit that fire or drop a file..."
+              placeholder="Consult the AI or upload a blueprint..."
               className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 px-4 pr-12 focus:outline-none focus:border-cannabis-light transition-all resize-none max-h-32 min-h-[56px] font-sans text-sm"
               rows={1}
             />

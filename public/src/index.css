@@ -64,6 +64,24 @@
   to { transform: rotate(360deg); }
 }
 
+@keyframes scan {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes scan-reverse {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+
+.animate-scan {
+  animation: scan 3s linear infinite;
+}
+
+.animate-scan-reverse {
+  animation: scan-reverse 3s linear infinite;
+}
+
 .wacky-border {
   border: 4px solid;
   border-image: linear-gradient(45deg, var(--color-cannabis-light), var(--color-money-gold), var(--color-curiosity-purple)) 1;

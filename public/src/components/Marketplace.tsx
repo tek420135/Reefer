@@ -11,28 +11,35 @@ import { AnimatePresence } from 'motion/react';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || 'pk_test_placeholder');
 
-const categories = ['ALL', 'GENETICS', 'HARDWARE', 'DIGITAL', 'VIBE', 'APPAREL', 'NUTRIENTS'];
+const categories = ['ALL', 'GENETICS', '3D-PRINTED', 'DIGITAL', 'VIBE', 'ECO-APPAREL', 'NANO-NUTES'];
 
 const products = [
-  { id: 1, name: 'NEURAL SEED v1', price: '4.20', category: 'GENETICS', image: 'https://picsum.photos/seed/seed1/400/400', eco: true, sourcing: 'Global Seed Vault', description: 'Self-optimizing neural genetics for high-yield digital growth.', options: ['Auto-Flower', 'Feminized', 'Regular'], trending: true },
-  { id: 2, name: 'GRAVITY BONG 3000', price: '42.00', category: 'HARDWARE', image: 'https://picsum.photos/seed/bong1/400/400', eco: true, sourcing: 'Recycled Glass Engine', description: 'Zero-G filtration system with haptic feedback sensors.', options: ['Clear', 'Neon', 'Stealth'], trending: false },
-  { id: 3, name: 'HEMP BLUEPRINT', price: '0.42', category: 'DIGITAL', image: 'https://picsum.photos/seed/print1/400/400', eco: true, sourcing: 'Open-Source Hemp', description: '3D printable blueprints for eco-friendly grow structures.', options: ['Standard', 'Enterprise'], trending: false },
-  { id: 4, name: 'GURU ESSENCE', price: '14.20', category: 'VIBE', image: 'https://picsum.photos/seed/vibe1/400/400', eco: true, sourcing: 'Pure Vibration', description: 'Aromatic digital frequency for deep meditation sessions.', options: ['Calm', 'Focus', 'Euphoria'], trending: true },
-  { id: 5, name: 'SOCKET HOODIE', price: '24.20', category: 'APPAREL', image: 'https://picsum.photos/seed/hoodie1/400/400', eco: true, sourcing: 'Organic Hemp Cotton', description: 'Smart-fabric hoodie with integrated neural-link pockets.', options: ['S', 'M', 'L', 'XL'], trending: false },
-  { id: 6, name: 'NANO-NUTRIENT PACK', price: '8.42', category: 'NUTRIENTS', image: 'https://picsum.photos/seed/nute1/400/400', eco: true, sourcing: 'Algae Bio-Reactor', description: 'Time-release nano-particles for optimal nutrient absorption.', options: ['Veg', 'Bloom', 'Boost'], trending: true },
-  { id: 7, name: 'CYBER-TRIMMER v2', price: '18.20', category: 'HARDWARE', image: 'https://picsum.photos/seed/trim1/400/400', eco: true, sourcing: 'Precision Labs', description: 'Laser-guided trimming tool for perfect harvest aesthetics.', options: ['Standard', 'Pro'], trending: false },
-  { id: 8, name: 'VIRTUAL TERPENES', price: '2.20', category: 'DIGITAL', image: 'https://picsum.photos/seed/terp1/400/400', eco: true, sourcing: 'Data Distillation', description: 'Digital scent profile for VR grow-room immersion.', options: ['Limonene', 'Myrcene', 'Pinene'], trending: false },
+  { id: 1, name: 'NEURAL SEED v1', price: '4.20', category: 'GENETICS', image: 'https://picsum.photos/seed/seed1/400/400', eco: true, sourcing: 'Global Seed Vault', description: 'Self-optimizing neural genetics for high-yield digital growth. Optimized for automated grow cycles.', options: ['Auto-Flower', 'Feminized', 'Regular'], trending: true },
+  { id: 2, name: 'GRAVITY BONG PoD', price: '42.00', category: '3D-PRINTED', image: 'https://picsum.photos/seed/bong1/400/400', eco: true, sourcing: 'Hemp-Based Filament', description: '3D-printed on demand using 100% biodegradable hemp filament. Zero-G filtration system.', options: ['Clear', 'Neon', 'Stealth'], trending: false },
+  { id: 3, name: 'HEMP BLUEPRINT', price: '0.42', category: 'DIGITAL', image: 'https://picsum.photos/seed/print1/400/400', eco: true, sourcing: 'Open-Source Hemp', description: '3D printable blueprints for eco-friendly grow structures. Compatible with all 3DPoD systems.', options: ['Standard', 'Enterprise'], trending: false },
+  { id: 4, name: 'GURU ESSENCE', price: '14.20', category: 'VIBE', image: 'https://picsum.photos/seed/vibe1/400/400', eco: true, sourcing: 'Pure Vibration', description: 'Aromatic digital frequency for deep meditation sessions. Syncs with your neural link.', options: ['Calm', 'Focus', 'Euphoria'], trending: true },
+  { id: 5, name: 'SOCKET HOODIE', price: '24.20', category: 'ECO-APPAREL', image: 'https://picsum.photos/seed/hoodie1/400/400', eco: true, sourcing: 'Organic Hemp Cotton', description: 'Smart-fabric hoodie made from sustainable hemp cotton. Integrated neural-link pockets.', options: ['S', 'M', 'L', 'XL'], trending: false },
+  { id: 6, name: 'NANO-NUTRIENT PACK', price: '8.42', category: 'NANO-NUTES', image: 'https://picsum.photos/seed/nute1/400/400', eco: true, sourcing: 'Algae Bio-Reactor', description: 'Time-release nano-particles for optimal nutrient absorption in automated grow rooms.', options: ['Veg', 'Bloom', 'Boost'], trending: true },
+  { id: 7, name: 'CYBER-TRIMMER PoD', price: '18.20', category: '3D-PRINTED', image: 'https://picsum.photos/seed/trim1/400/400', eco: true, sourcing: 'Precision Labs', description: 'Laser-guided trimming tool, 3D-printed on demand for perfect harvest aesthetics.', options: ['Standard', 'Pro'], trending: false },
+  { id: 8, name: 'VIRTUAL TERPENES', price: '2.20', category: 'DIGITAL', image: 'https://picsum.photos/seed/terp1/400/400', eco: true, sourcing: 'Data Distillation', description: 'Digital scent profile for AR grow-room immersion. Experience your harvest in VR.', options: ['Limonene', 'Myrcene', 'Pinene'], trending: false },
 ];
 
 export default function Marketplace() {
   const [loading, setLoading] = useState<number | null>(null);
-  const { notify, triggerShake, addXp } = useSocketContext();
+  const { notify, triggerShake, addXp, addToInventory } = useSocketContext();
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [sortBy, setSortBy] = useState<'price' | 'name'>('name');
   const [selectedOptions, setSelectedOptions] = useState<Record<number, string>>({});
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState<any[]>(() => {
+    const saved = localStorage.getItem('socket_cart');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('socket_cart', JSON.stringify(cart));
+  }, [cart]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<any>(null);
 
@@ -150,6 +157,17 @@ export default function Marketplace() {
         notify(`DEMO MODE: CART SECURED`);
         triggerShake(10);
         addXp(200);
+        
+        // Add all items to inventory
+        cart.forEach(item => {
+          addToInventory({
+            id: `inv-${Date.now()}-${item.id}`,
+            name: item.name,
+            type: item.category.toLowerCase() as any,
+            rarity: item.trending ? 'rare' : 'common'
+          });
+        });
+
         window.location.href = session.url;
         return;
       }
@@ -213,9 +231,27 @@ export default function Marketplace() {
       // Handle mock checkout
       if (session.mock) {
         notify(`DEMO MODE: ${product.name} SECURED`);
-        triggerShake(10);
+        triggerShake(15);
         addXp(100);
-        window.location.href = session.url;
+        
+        // Add to inventory
+        addToInventory({
+          id: `inv-${Date.now()}-${product.id}`,
+          name: product.name,
+          type: product.category.toLowerCase() as any,
+          rarity: product.trending ? 'rare' : 'common'
+        });
+
+        // Neural Link Buy Animation
+        const overlay = document.createElement('div');
+        overlay.className = 'fixed inset-0 z-[1000] bg-cannabis-light/20 backdrop-invert pointer-events-none flex items-center justify-center';
+        overlay.innerHTML = `<div class="text-6xl font-display font-black text-cannabis-dark animate-ping">NEURAL LINK SECURED</div>`;
+        document.body.appendChild(overlay);
+        
+        setTimeout(() => {
+          document.body.removeChild(overlay);
+          window.location.href = session.url;
+        }, 1500);
         return;
       }
 
@@ -526,6 +562,9 @@ export default function Marketplace() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <div className="w-full flex justify-between items-center">
                   <div className="flex gap-2">
+                    <button className="p-2 bg-white/10 backdrop-blur-md rounded-lg border border-white/20 text-white hover:bg-money-gold hover:text-black transition-all">
+                      <Star size={14} />
+                    </button>
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();

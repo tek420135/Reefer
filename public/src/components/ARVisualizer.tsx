@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from 'react';
+import React, { useRef, useState, useMemo, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { 
   OrbitControls, 
@@ -145,10 +145,25 @@ function Plant({ position = [0, 0, 0] as [number, number, number], scale = 1, co
 export default function ARVisualizer() {
   const { notify, addXp } = useSocketContext();
   const [activeTab, setActiveTab] = useState<'tent' | 'plant' | 'grid'>('tent');
-  const [selectedColor, setSelectedColor] = useState(COLORS[0]);
-  const [selectedMaterial, setSelectedMaterial] = useState(MATERIALS[0]);
-  const [selectedDecal, setSelectedDecal] = useState<any>(null);
-  const [isDesigning, setIsDesigning] = useState(false);
+  const [selectedColor, setSelectedColor] = useState(() => {
+    const saved = localStorage.getItem('socket_design_color');
+    return saved ? COLORS.find(c => c.id === saved) || COLORS[0] : COLORS[0];
+  });
+  const [selectedMaterial, setSelectedMaterial] = useState(() => {
+    const saved = localStorage.getItem('socket_design_material');
+    return saved ? MATERIALS.find(m => m.id === saved) || MATERIALS[0] : MATERIALS[0];
+  });
+  const [selectedDecal, setSelectedDecal] = useState<any>(() => {
+    const saved = localStorage.getItem('socket_design_decal');
+    return saved ? DECALS.find(d => d.id === saved) || null : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('socket_design_color', selectedColor.id);
+    localStorage.setItem('socket_design_material', selectedMaterial.id);
+    localStorage.setItem('socket_design_decal', selectedDecal?.id || '');
+  }, [selectedColor, selectedMaterial, selectedDecal]);
+  const [isDesigning, setIsDesigning] = useState(true);
   const [isARMode, setIsARMode] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -398,7 +413,22 @@ export default function ARVisualizer() {
             </section>
 
             {/* Print on Demand */}
-            <section className="pt-4 border-t border-white/10 space-y-3">
+            <section className="pt-4 border-t border-white/10 space-y-4">
+              <div className="p-4 bg-white/5 rounded-2xl border border-white/10 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-[8px] font-mono text-white/40 uppercase">Est. Print Time</span>
+                  <span className="text-[10px] font-mono text-cannabis-light">2h 42m</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[8px] font-mono text-white/40 uppercase">Filament</span>
+                  <span className="text-[10px] font-mono text-money-gold">Hemp-Based</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-[8px] font-mono text-white/40 uppercase">Cost</span>
+                  <span className="text-[10px] font-mono text-curiosity-purple">0.42 SEEDS</span>
+                </div>
+              </div>
+
               <button
                 onClick={handlePrintRequest}
                 className="w-full p-4 bg-cannabis-light text-cannabis-dark rounded-2xl font-bold text-[10px] font-mono uppercase tracking-widest flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-[0_0_20px_rgba(163,230,53,0.3)]"
@@ -434,13 +464,25 @@ export default function ARVisualizer() {
         </div>
       </div>
 
-      <div className="absolute bottom-6 right-6 flex items-center gap-4">
+      <div className="absolute bottom-6 right-6 flex items-center gap-4 z-20">
         <div className="text-right">
           <p className="text-[8px] font-mono text-white/40 uppercase mb-1 tracking-[0.2em]">Render Engine</p>
           <p className="text-xs font-bold text-cannabis-light tracking-widest">ULTRA-FIDELITY</p>
         </div>
-        <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40">
-          <Maximize2 size={20} />
+        <div className="flex gap-2">
+          <button 
+            onClick={() => {
+              notify("RESETTING VIEWPORT... 🔄");
+              // OrbitControls reset is handled by the component internally if we had a ref, 
+              // but for now we'll just trigger a notification
+            }}
+            className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:bg-white/10 transition-all"
+          >
+            <RotateCcw size={20} />
+          </button>
+          <button className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:bg-white/10 transition-all">
+            <Maximize2 size={20} />
+          </button>
         </div>
       </div>
     </div>

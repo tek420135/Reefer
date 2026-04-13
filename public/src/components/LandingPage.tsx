@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Box, Layers, Globe, Cpu, ShoppingBag, Calendar, HelpCircle, Users, Mail, ShieldCheck, BookOpen, MessageSquare, Layout, Activity, Zap, Leaf } from 'lucide-react';
+import { Box, Layers, Globe, Cpu, ShoppingBag, Calendar, HelpCircle, Users, Mail, ShieldCheck, BookOpen, MessageSquare, Layout, Activity, Zap, Leaf, Code, Download, Smartphone, Terminal, Store, Brain, Printer } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { useSocketContext } from '../context/SocketContext';
 
@@ -80,6 +80,8 @@ import BookingSystem from './BookingSystem';
 import Marketplace from './Marketplace';
 import VirtualGrow from './VirtualGrow';
 import SeedToSmokeFlow from './SeedToSmokeFlow';
+import NeuralHacking from './NeuralHacking';
+import TheVault from './TheVault';
 
 interface LandingPageProps {
   xp?: number;
@@ -93,43 +95,82 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       <Section
         id="hero"
         title="THE SOCKET"
-        subtitle="Seed to Smoke Metaverse"
-        description="What happens when Willie, Snoop, Bruce, and Pac roll one together? You get the GanjaGuru. The grid. The switchboard. The plug behind the plug."
-        icon={<Leaf size={120} />}
-        className="mt-0"
+        subtitle="The Eco-Grid Sync"
+        description="The world's first AI-powered, 3D-printed cannabis metaverse. We've digitized the wisdom of legends to automate your grow, design your gear, and sync your stash with the grid."
+        icon={<Globe size={120} />}
+        className="mt-0 relative overflow-hidden"
       >
-        <div className="flex flex-col items-center gap-8">
-          <div className="w-full max-w-md aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-money-gold/50 relative">
+        {/* Neural Background Accents */}
+        <div className="absolute inset-0 pointer-events-none opacity-20">
+          <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-cannabis-light blur-[120px] animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-curiosity-purple blur-[120px] animate-pulse delay-1000" />
+        </div>
+
+        <div className="flex flex-col items-center gap-8 relative z-10">
+          <div className="w-full max-w-md aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-money-gold/50 relative group">
             <img 
               src="https://picsum.photos/seed/cannabis-meta/800/450" 
               alt="Metaverse Preview" 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
-              <p className="text-xs font-mono text-money-gold">LIVE STREAM: GROW ROOM ALPHA v0.42</p>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <p className="text-[10px] font-mono text-white/80 uppercase tracking-widest">LIVE STREAM: GROW ROOM ALPHA v0.42</p>
+              </div>
+              <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+                <motion.div 
+                  animate={{ x: ['-100%', '100%'] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="h-full w-1/3 bg-money-gold" 
+                />
+              </div>
             </div>
           </div>
         </div>
       </Section>
 
-      {/* Main Chat / GanjaGuru Section */}
+      {/* Main Chat / AI Consultant Section */}
       <Section
         id="ganjaguru"
-        title="GANJA GURU"
-        subtitle="AI Powered Wisdom"
-        description="Spit your vision, drop your blueprints, or just vibe. Our AI flavored blunt wrap is ready to analyze your flow."
-        icon={<MessageSquare size={120} />}
+        title="AI CONSULTANT"
+        subtitle="Neural Eco-Expert"
+        description="Meet your new head of cultivation. Our AI Consultant analyzes your grow space, optimizes your design, and provides real-time wisdom for the perfect sustainable harvest."
+        icon={<Brain size={120} />}
       >
         <GanjaGuruChat />
+      </Section>
+
+      {/* Neural Hacking Section */}
+      <Section
+        id="neural-hacking"
+        title="NEURAL SYNC"
+        subtitle="Farm Digital Seeds"
+        description="Sync with the grid to earn XP and Digital Seeds. Our interactive neural link allows you to farm resources for your next 3D-printed grow tool."
+        icon={<Terminal size={120} />}
+        className="bg-cannabis-light/5"
+      >
+        <NeuralHacking />
+      </Section>
+
+      {/* The Vault Section */}
+      <Section
+        id="the-vault"
+        title="THE VAULT"
+        subtitle="Secured Inventory"
+        description="Manage your digital stash. The Vault stores your 3D blueprints, eco-sourced genetics, and custom designs in a secure, encrypted grid."
+        icon={<ShieldCheck size={120} />}
+      >
+        <TheVault />
       </Section>
 
       {/* Grow Dashboard Section */}
       <Section
         id="ar-vr"
-        title="LIVE GRID"
-        subtitle="Real-Time Monitoring"
-        description="Your grow room, digitized. Monitor every breath your plants take through the Socket's neural link."
+        title="ECO-GRID"
+        subtitle="Real-Time Grow Analytics"
+        description="Monitor your virtual and physical grow rooms through our real-time analytics dashboard. Precision tracking for temperature, humidity, and CO2."
         icon={<Activity size={120} />}
         className="bg-cannabis-dark/10"
       >
@@ -139,10 +180,10 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       {/* Design Studio Section */}
       <Section
         id="design-studio"
-        title="3D STUDIO"
-        subtitle="Design Studio"
-        description="Custom brackets, bongs, or stealth grow cabinets. If you can dream it, the GanjaGuru can print it."
-        icon={<Box size={120} />}
+        title="SOCIAL FORGE"
+        subtitle="3D Print on Demand"
+        description="Design custom grow brackets, bongs, and stealth cabinets. We use 100% biodegradable hemp filament to print your vision on demand."
+        icon={<Printer size={120} />}
       >
         <DesignStudio />
       </Section>
@@ -151,15 +192,15 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       <Section
         id="what-we-do"
         title="THE GRID"
-        subtitle="Our Ecosystem"
-        description="No inventory. No limits. Just pure innovation. We source, we design, we deliver. You just plug in."
+        subtitle="Sustainable Ecosystem"
+        description="We've eliminated inventory waste. Our just-in-time manufacturing model ensures 100% sustainable sourcing and pinpoint delivery."
         icon={<Globe size={120} />}
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
           {[
-            { title: '3DPoD', desc: 'Custom brackets, bongs, and grow tools printed on demand.', icon: <Box className="text-cannabis-light" /> },
-            { title: 'AR/VR Design', desc: 'Walk through your grow space before the first seed drops.', icon: <Layers className="text-money-gold" /> },
-            { title: 'Eco-Sourcing', desc: '100% biodegradable, sustainable, and earth-friendly.', icon: <ShieldCheck className="text-curiosity-purple" /> },
+            { title: '3DPoD', desc: 'Custom grow tools and hardware printed on demand with zero waste.', icon: <Box className="text-cannabis-light" /> },
+            { title: 'AR/VR Design', desc: 'Visualize your automated grow room before manufacturing begins.', icon: <Layers className="text-money-gold" /> },
+            { title: 'Eco-Sourcing', desc: '100% biodegradable materials sourced from sustainable hemp farms.', icon: <ShieldCheck className="text-curiosity-purple" /> },
           ].map((item, i) => (
             <div key={i} className="p-6 glass-morphism rounded-3xl border border-white/10 hover:border-cannabis-light transition-all group">
               <div className="mb-4 group-hover:scale-125 transition-transform">{item.icon}</div>
@@ -174,9 +215,9 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       <Section
         id="ecommerce"
         title="THE MARKET"
-        subtitle="The Socket Marketplace"
-        description="Auto-sourced, drop-shipped, and legal. Use your digital seeds to secure the latest genetics and hardware."
-        icon={<ShoppingBag size={120} />}
+        subtitle="Eco-Friendly Marketplace"
+        description="Sustainably sourced genetics and hardware. Every item in our market is verified for eco-impact and delivered via pinpoint drop."
+        icon={<Store size={120} />}
       >
         <Marketplace />
       </Section>
@@ -185,8 +226,8 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       <Section
         id="booking"
         title="THE PLUG"
-        subtitle="Book a Consultation"
-        description="Need a one-on-one with a master? Secure your slot in the cipher and get that expert flow."
+        subtitle="Expert Consultation"
+        description="Book a one-on-one session with our master cultivators. Get personalized advice on grow room automation and design."
         icon={<Calendar size={120} />}
       >
         <BookingSystem />
@@ -195,9 +236,9 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       {/* Onboarding Section */}
       <Section
         id="onboarding"
-        title="PLUG IN"
+        title="SYNC NOW"
         subtitle="Interactive Onboarding"
-        description="Step into the portal. Your journey from seed to smoke starts with a single spark."
+        description="Your journey from seed to smoke starts here. Sync your device with the grid to begin your automated grow journey."
         icon={<Zap size={120} />}
       >
         <SeedToSmokeFlow />
@@ -207,8 +248,8 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       <Section
         id="virtual-grow"
         title="VIRTUAL GROW"
-        subtitle="AR & VR Integration"
-        description="Walk through your automated grow space in full 3D. Adjust the lights, check the humidity, and vibe with your plants in real-time."
+        subtitle="AR Grow Room Design"
+        description="Use Augmented Reality to walk through your grow space. Adjust lighting, airflow, and plant placement in real-time 3D."
         icon={<Layers size={120} />}
         className="bg-curiosity-purple/10"
       >
@@ -219,19 +260,19 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       <Section
         id="how-it-works"
         title="THE FLOW"
-        subtitle="How It Works"
-        description="We broke the rules so you don't have to. A seamless flow from browser to final sale."
+        subtitle="Automated Supply Chain"
+        description="We've reinvented the supply chain. From digital design to physical delivery in 24 hours."
         icon={<Zap size={120} />}
       >
         <div className="flex flex-col space-y-12 max-w-2xl mx-auto">
           {[
-            { step: '01', title: 'Vibe Check', desc: 'Tell the GanjaGuru what you need. A custom bong? A stealth grow cabinet? A coloring book?' },
-            { step: '02', title: 'Auto-Source', desc: 'Our grid scans the planet for eco-friendly, sustainable materials. No inventory, no waste.' },
-            { step: '03', title: '3D Reality', desc: 'We print your custom gear or design your space in AR/VR.' },
-            { step: '04', title: 'Pinpoint Drop', desc: '24-hour delivery to exactly where you sit your tush.' },
+            { title: 'Neural Consultation', desc: 'Consult with our AI to define your grow needs and custom hardware specs.' },
+            { title: 'Eco-Sourcing', desc: 'Our grid sources sustainable, eco-friendly materials for your 3D-printed designs.' },
+            { title: '3D Reality', desc: 'We manufacture your custom gear on demand using hemp-based filaments.' },
+            { title: 'Pinpoint Drop', desc: 'Precision 24-hour delivery to your exact GPS coordinates.' },
           ].map((item, i) => (
             <div key={i} className="flex gap-6 items-start text-left group">
-              <div className="text-4xl font-black text-white/10 group-hover:text-cannabis-light transition-colors">{item.step}</div>
+              <div className="text-4xl font-black text-white/10 group-hover:text-cannabis-light transition-colors">0{i+1}</div>
               <div>
                 <h4 className="text-2xl font-display font-bold mb-2">{item.title}</h4>
                 <p className="text-white/60">{item.desc}</p>
@@ -252,7 +293,7 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {[
             { name: 'Slick Rick', quote: 'The Socket is the real deal. My grow room design is pure fire.', role: 'Master Grower' },
-            { name: 'D-Low', quote: 'Custom 3D printed rolling trays? Say less. GanjaGuru is the plug.', role: 'Connoisseur' },
+            { name: 'D-Low', quote: 'Custom 3D printed rolling trays? Say less. The Socket is the plug.', role: 'Connoisseur' },
           ].map((t, i) => (
             <div key={i} className="p-8 glass-morphism rounded-3xl border-t-4 border-money-gold text-left italic">
               <p className="text-lg mb-4">"{t.quote}"</p>
@@ -325,7 +366,7 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
             { title: 'The 3DPoD Revolution', date: 'APR 04', tag: 'TECH' },
-            { title: 'Snoop Mode: A Deep Dive', date: 'APR 02', tag: 'VIBE' },
+            { title: 'Neural Sync: A Deep Dive', date: 'APR 02', tag: 'VIBE' },
             { title: 'Eco-Friendly Grow Ops', date: 'MAR 28', tag: 'GUIDE' },
           ].map((post, i) => (
             <div key={i} className="group cursor-pointer">
@@ -355,9 +396,9 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       >
         <div className="flex flex-wrap justify-center gap-8">
           {[
-            { name: 'GURU_01', role: 'Architect', color: 'bg-cannabis-light' },
-            { name: 'PLUG_42', role: 'Sourcing', color: 'bg-money-gold' },
-            { name: 'CODE_RED', role: 'AI Dev', color: 'bg-curiosity-purple' },
+            { name: 'ARCHITECT', role: 'Lead Design', color: 'bg-cannabis-light' },
+            { name: 'THE_PLUG', role: 'Eco-Sourcing', color: 'bg-money-gold' },
+            { name: 'NEURAL_DEV', role: 'AI Engineering', color: 'bg-curiosity-purple' },
           ].map((member, i) => (
             <div key={i} className="flex flex-col items-center group">
               <div className={`w-24 h-24 rounded-full ${member.color} mb-4 shadow-xl group-hover:scale-110 transition-transform flex items-center justify-center text-black font-black text-2xl`}>
@@ -375,14 +416,14 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
         id="faq"
         title="THE CIPHER"
         subtitle="Help & Support"
-        description="Got questions? We got answers. If not, the GanjaGuru will find them."
+        description="Got questions? We got answers. If not, the AI Consultant will find them."
         icon={<HelpCircle size={120} />}
       >
         <div className="max-w-2xl mx-auto space-y-4">
           {[
             { q: 'Is it legal?', a: 'We handle the legalities once, you stay legal after that. The Socket is a tool for innovation.' },
             { q: 'How does 3DPoD work?', a: 'You design it in the studio, we print it using hemp-based filament and drop it at your door.' },
-            { q: 'What is Snoop Mode?', a: 'It is a high-frequency UI state optimized for smooth navigation and deep focus.' },
+            { q: 'What is Neural Sync?', a: 'It is a high-frequency UI state optimized for smooth navigation and deep focus.' },
           ].map((item, i) => (
             <div key={i} className="text-left p-6 glass-morphism rounded-2xl border border-white/10 hover:border-money-gold transition-all">
               <h4 className="font-bold mb-2 flex items-center gap-2">
@@ -432,22 +473,52 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
         description="Take the grid with you. Install the Socket on your device for offline blueprints and pinpoint delivery alerts."
         icon={<Layout size={120} />}
       >
-        <div className="flex flex-col items-center gap-6">
-          <div className="p-6 glass-morphism rounded-2xl border border-white/10 animate-bounce">
-            <Zap className="text-money-gold" size={48} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="p-8 glass-morphism rounded-[32px] border border-white/10 flex flex-col items-center text-center space-y-6">
+            <div className="w-16 h-16 bg-cannabis-light/20 rounded-2xl flex items-center justify-center text-cannabis-light">
+              <Smartphone size={32} />
+            </div>
+            <h4 className="text-xl font-display font-bold uppercase">Install as PWA</h4>
+            <p className="text-sm text-white/50">
+              Open the app in Chrome, tap the menu, and select "Add to Home Screen" for a full-screen, offline-ready experience.
+            </p>
+            <button 
+              onClick={onInstall}
+              className="w-full py-4 bg-cannabis-light text-cannabis-dark font-black rounded-2xl shadow-xl hover:scale-105 transition-transform"
+            >
+              INSTALL NOW
+            </button>
           </div>
-          <button 
-            onClick={onInstall}
-            className="px-12 py-6 bg-gradient-to-r from-cannabis-light to-money-gold text-cannabis-dark font-black rounded-3xl shadow-2xl hover:scale-105 transition-transform"
-          >
-            INSTALL THE SOCKET
-          </button>
-          <p className="text-xs font-mono text-white/30">v1.0.42-STABLE • ANDROID & iOS READY</p>
+
+          <div className="p-8 glass-morphism rounded-[32px] border border-white/10 flex flex-col items-center text-center space-y-6">
+            <div className="w-16 h-16 bg-money-gold/20 rounded-2xl flex items-center justify-center text-money-gold">
+              <Code size={32} />
+            </div>
+            <h4 className="text-xl font-display font-bold uppercase">The Blueprint</h4>
+            <p className="text-sm text-white/50">
+              Want to advance the grid? Run the full development environment on your Android using Termux and Acode.
+            </p>
+            <button 
+              onClick={() => {
+                const guide = `THE SOCKET: Android Development Guide\n\n1. Install Termux & Acode\n2. pkg install nodejs git\n3. npm install\n4. npm run dev\n5. Visit localhost:3000`;
+                const blob = new Blob([guide], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'DEVELOPMENT_GUIDE.txt';
+                a.click();
+              }}
+              className="w-full py-4 bg-white/10 text-white border border-white/10 font-black rounded-2xl hover:bg-white/20 transition-all flex items-center justify-center gap-2"
+            >
+              <Download size={18} /> DEV GUIDE
+            </button>
+          </div>
         </div>
+        <p className="mt-8 text-xs font-mono text-white/30">v1.0.42-STABLE • ANDROID & iOS READY • OFFLINE PERSISTENCE ACTIVE</p>
       </Section>
 
       <footer className="py-12 text-center border-t border-white/10 font-mono text-[10px] text-white/30">
-        <p>© 2026 GANJAGURU - THE SOCKET. ALL RIGHTS RESERVED. KEEP IT GREEN.</p>
+        <p>© 2026 THE SOCKET. ALL RIGHTS RESERVED. KEEP IT GREEN.</p>
         <div className="flex justify-center gap-4 mt-4">
           <span>TOS</span>
           <span>PRIVACY</span>

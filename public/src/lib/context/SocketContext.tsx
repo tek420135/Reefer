@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { useSocket, VibeType } from '../hooks/useSocket';
+import { useSocket, VibeType, InventoryItem } from '../hooks/useSocket';
 
 interface SocketContextType {
   seeds: number;
@@ -8,6 +8,7 @@ interface SocketContextType {
   isWarping: boolean;
   isMenuOpen: boolean;
   notifications: string[];
+  inventory: InventoryItem[];
   triggerWarp: () => void;
   addSeeds: (amount: number) => void;
   addXp: (amount: number) => void;
@@ -16,6 +17,7 @@ interface SocketContextType {
   toggleMenu: () => void;
   notify: (message: string) => void;
   triggerShake: (intensity?: number) => void;
+  addToInventory: (item: Omit<InventoryItem, 'timestamp'>) => void;
 }
 
 const SocketContext = createContext<SocketContextType | undefined>(undefined);
