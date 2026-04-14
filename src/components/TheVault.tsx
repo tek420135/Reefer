@@ -5,7 +5,7 @@ import { useSocketContext } from '../context/SocketContext';
 import { cn } from '@/src/lib/utils';
 
 export default function TheVault() {
-  const { inventory, xp, notify, triggerWarp } = useSocketContext();
+  const { inventory, xp } = useSocketContext();
 
   const rarityColors = {
     common: 'text-white/40 border-white/10',
@@ -43,29 +43,10 @@ export default function TheVault() {
         </div>
         
         <div className="flex gap-3">
-          <button 
-            onClick={() => {
-              const manifest = JSON.stringify(inventory, null, 2);
-              const blob = new Blob([manifest], { type: 'application/json' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a');
-              a.href = url;
-              a.download = `socket-manifest-${Date.now()}.json`;
-              a.click();
-              notify("MANIFEST EXPORTED TO NEURAL LINK");
-            }}
-            className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[10px] font-mono uppercase tracking-widest transition-all"
-          >
+          <button className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-2xl text-[10px] font-mono uppercase tracking-widest transition-all">
             Export Manifest
           </button>
-          <button 
-            onClick={() => {
-              triggerWarp();
-              notify("GRID SYNC IN PROGRESS...");
-              setTimeout(() => notify("GRID FULLY SYNCHRONIZED"), 2000);
-            }}
-            className="px-6 py-3 bg-money-gold text-money-green font-bold rounded-2xl text-[10px] uppercase tracking-widest hover:scale-105 transition-transform shadow-lg"
-          >
+          <button className="px-6 py-3 bg-money-gold text-money-green font-bold rounded-2xl text-[10px] uppercase tracking-widest hover:scale-105 transition-transform shadow-lg">
             Sync Grid
           </button>
         </div>
@@ -103,62 +84,64 @@ export default function TheVault() {
               animate={{ opacity: 1 }}
               className="col-span-full py-20 text-center space-y-4 opacity-40"
             >
-              <Box size={64} className="mx-auto" />
+              <Package size={64} className="mx-auto" />
               <p className="font-mono text-sm uppercase tracking-widest">The Vault is currently empty.</p>
               <p className="text-xs">Acquire blueprints or 3D designs in the Marketplace to secure them here.</p>
             </motion.div>
           ) : (
-            inventory.map((item, i) => (
-              <motion.div
-                key={item.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8 }}
-                transition={{ delay: i * 0.05 }}
-                className={cn(
-                  "p-6 glass-morphism rounded-3xl border flex flex-col gap-4 group relative overflow-hidden",
-                  rarityColors[item.rarity]
-                )}
-              >
-                {/* Rarity Glow */}
-                <div className="absolute -top-10 -right-10 w-24 h-24 bg-current opacity-5 blur-3xl group-hover:opacity-20 transition-opacity" />
-                
-                <div className="flex justify-between items-start">
-                  <div className="p-3 bg-white/5 rounded-2xl">
-                    <Box size={24} />
+            inventory.map((item, i) => {
+              return (
+                <motion.div
+                  key={item.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ delay: i * 0.05 }}
+                  className={cn(
+                    "p-6 glass-morphism rounded-3xl border flex flex-col gap-4 group relative overflow-hidden",
+                    rarityColors[item.rarity]
+                  )}
+                >
+                  {/* Rarity Glow */}
+                  <div className="absolute -top-10 -right-10 w-24 h-24 bg-current opacity-5 blur-3xl group-hover:opacity-20 transition-opacity" />
+                  
+                  <div className="flex justify-between items-start">
+                    <div className="p-3 bg-white/5 rounded-2xl">
+                      <Package size={24} />
+                    </div>
+                    <div className="text-[8px] font-mono uppercase px-2 py-1 bg-white/5 rounded-lg border border-white/10">
+                      {item.rarity}
+                    </div>
                   </div>
-                  <div className="text-[8px] font-mono uppercase px-2 py-1 bg-white/5 rounded-lg border border-white/10">
-                    {item.rarity}
-                  </div>
-                </div>
 
-                <div>
-                  <h4 className="font-bold text-lg uppercase tracking-tight group-hover:text-white transition-colors">{item.name}</h4>
-                  <p className="text-[10px] font-mono opacity-50 uppercase tracking-widest mt-1">{item.type}</p>
-                </div>
-
-                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-[8px] font-mono opacity-40">
-                    <Clock size={10} />
-                    {new Date(item.timestamp).toLocaleDateString()}
+                  <div>
+                    <h4 className="font-bold text-lg uppercase tracking-tight group-hover:text-white transition-colors">{item.name}</h4>
+                    <p className="text-[10px] font-mono opacity-50 uppercase tracking-widest mt-1">{item.type}</p>
                   </div>
-                  <div className="flex gap-2">
-                    <button className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white">
-                      <Zap size={14} />
-                    </button>
-                    <button className="p-2 hover:bg-red-500/20 rounded-lg transition-colors text-white/40 hover:text-red-500">
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                </div>
 
-                {/* Action Button */}
-                <button className="mt-2 w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-mono uppercase tracking-widest transition-all opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0">
-                  Deploy to Eco-Grid
-                </button>
-              </motion.div>
-            ))
+                  <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-[8px] font-mono opacity-40">
+                      <Clock size={10} />
+                      {new Date(item.timestamp).toLocaleDateString()}
+                    </div>
+                    <div className="flex gap-2">
+                      <button className="p-2 hover:bg-white/10 rounded-lg transition-colors text-white/40 hover:text-white">
+                        <Zap size={14} />
+                      </button>
+                      <button className="p-2 hover:bg-red-500/20 rounded-lg transition-colors text-white/40 hover:text-red-500">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Action Button */}
+                  <button className="mt-2 w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-[10px] font-mono uppercase tracking-widest transition-all opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0">
+                    Deploy to Eco-Grid
+                  </button>
+                </motion.div>
+              );
+            })
           )}
         </AnimatePresence>
       </div>

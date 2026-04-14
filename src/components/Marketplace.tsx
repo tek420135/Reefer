@@ -161,7 +161,7 @@ export default function Marketplace() {
         // Add all items to inventory
         cart.forEach(item => {
           addToInventory({
-            id: `inv-${Date.now()}-${item.id}`,
+            id: `inv-${crypto.randomUUID()}-${item.id}`,
             name: item.name,
             type: item.category.toLowerCase() as any,
             rarity: item.trending ? 'rare' : 'common'
@@ -236,7 +236,7 @@ export default function Marketplace() {
         
         // Add to inventory
         addToInventory({
-          id: `inv-${Date.now()}-${product.id}`,
+          id: `inv-${crypto.randomUUID()}-${product.id}`,
           name: product.name,
           type: product.category.toLowerCase() as any,
           rarity: product.trending ? 'rare' : 'common'

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'motion/react';
-import { Menu, X, Leaf, Zap, Globe, MessageSquare, ShoppingBag, Calendar, Users, Mail, ShieldCheck, Activity, Box, Layers, Bell, Smartphone, Terminal, Store, Brain, Printer, LogIn, LogOut } from 'lucide-react';
+import { Menu, X, Leaf, Zap, Globe, MessageSquare, ShoppingBag, Calendar, Users, Mail, ShieldCheck, Activity, Box, Layers, Bell, Smartphone, Terminal } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import LandingPage from './components/LandingPage';
 import SmokeCursor from './components/SmokeCursor';
@@ -10,8 +10,6 @@ import FloatingGuru from './components/FloatingGuru';
 import OfflineGuide from './components/OfflineGuide';
 import NeuralOverlay from './components/NeuralOverlay';
 import { SocketProvider, useSocketContext } from './context/SocketContext';
-import { auth, signIn, logOut } from './firebase';
-import { onAuthStateChanged, User } from 'firebase/auth';
 
 function SocketApp() {
   const { 
@@ -23,14 +21,6 @@ function SocketApp() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showOfflineGuide, setShowOfflineGuide] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-    });
-    return () => unsubscribe();
-  }, []);
 
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
@@ -64,14 +54,14 @@ function SocketApp() {
   }, []);
 
   const menuItems = [
-    { id: 'hero', icon: <Globe size={20} />, label: 'Eco-Grid' },
-    { id: 'ganjaguru', icon: <Brain size={20} />, label: 'AI Consultant' },
+    { id: 'hero', icon: <Leaf size={20} />, label: 'Eco-Grid' },
+    { id: 'ganjaguru', icon: <MessageSquare size={20} />, label: 'AI Consultant' },
     { id: 'neural-hacking', icon: <Terminal size={20} />, label: 'Neural Sync' },
     { id: 'the-vault', icon: <ShieldCheck size={20} />, label: 'The Vault' },
     { id: 'ar-vr', icon: <Activity size={20} />, label: 'Grow Analytics' },
-    { id: 'design-studio', icon: <Printer size={20} />, label: 'Social Forge' },
+    { id: 'design-studio', icon: <Box size={20} />, label: 'Social Forge' },
     { id: 'virtual-grow', icon: <Layers size={20} />, label: 'AR Design' },
-    { id: 'ecommerce', icon: <Store size={20} />, label: 'Marketplace' },
+    { id: 'ecommerce', icon: <ShoppingBag size={20} />, label: 'Marketplace' },
     { id: 'onboarding', icon: <Zap size={20} />, label: 'Sync Flow' },
     { id: 'booking', icon: <Calendar size={20} />, label: 'Consultation' },
   ];
@@ -85,52 +75,24 @@ function SocketApp() {
         style={{ scaleX }}
       />
 
-      {/* Vibe Switcher & Auth */}
-      <div className="fixed top-8 right-8 flex items-center gap-4 z-50">
-        {user ? (
-          <div className="flex items-center gap-3 glass-morphism p-1 pr-4 rounded-full border border-white/10">
-            <img 
-              src={user.photoURL || `https://picsum.photos/seed/${user.uid}/100/100`} 
-              className="w-8 h-8 rounded-full border border-white/20" 
-              alt={user.displayName || 'User'}
-              referrerPolicy="no-referrer"
-            />
-            <span className="text-[10px] font-mono text-white/60 uppercase truncate max-w-[80px]">{user.displayName?.split(' ')[0]}</span>
-            <button 
-              onClick={() => logOut()}
-              className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-white/40 hover:text-red-500"
-              title="Logout"
-            >
-              <LogOut size={14} />
-            </button>
-          </div>
-        ) : (
-          <button 
-            onClick={() => signIn()}
-            className="px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full text-[10px] font-mono uppercase tracking-widest flex items-center gap-2 transition-all"
+      {/* Vibe Switcher */}
+      <div className="fixed top-8 right-8 flex gap-2 z-50">
+        {(['willie', 'snoop', 'bruce'] as const).map((v) => (
+          <button
+            key={v}
+            onClick={() => switchVibe(v)}
+            className={cn(
+              "w-10 h-10 rounded-full border transition-all flex items-center justify-center",
+              vibe === v 
+                ? "border-white scale-110 shadow-lg" 
+                : "border-white/10 opacity-40 hover:opacity-100"
+            )}
+            style={{ backgroundColor: vibes[v].color }}
+            title={vibes[v].label}
           >
-            <LogIn size={14} /> Sync Identity
+            <Zap size={16} className={vibe === v ? 'text-black' : 'text-white'} />
           </button>
-        )}
-
-        <div className="flex gap-2">
-          {(['willie', 'snoop', 'bruce'] as const).map((v) => (
-            <button
-              key={v}
-              onClick={() => switchVibe(v)}
-              className={cn(
-                "w-10 h-10 rounded-full border transition-all flex items-center justify-center",
-                vibe === v 
-                  ? "border-white scale-110 shadow-lg" 
-                  : "border-white/10 opacity-40 hover:opacity-100"
-              )}
-              style={{ backgroundColor: vibes[v].color }}
-              title={vibes[v].label}
-            >
-              <Zap size={16} className={vibe === v ? 'text-black' : 'text-white'} />
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
 
       {/* Global Notifications */}

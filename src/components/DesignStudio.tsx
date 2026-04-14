@@ -30,7 +30,7 @@ import { MATERIALS, COLORS, DECALS } from './design/constants';
 import { Material, Color, Decal } from './design/types';
 
 export default function DesignStudio() {
-  const { notify, addXp, xp, addToInventory } = useSocketContext();
+  const { notify, addXp, xp } = useSocketContext();
   const [activeTab, setActiveTab] = useState<'tent' | 'plant' | 'grid'>('tent');
   const [selectedColor, setSelectedColor] = useState<Color>(COLORS[0]);
   const [selectedMaterial, setSelectedMaterial] = useState<Material>(MATERIALS[0]);
@@ -240,18 +240,7 @@ export default function DesignStudio() {
                   referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
-                  <button 
-                    onClick={() => {
-                      addToInventory({
-                        id: `remix-${Date.now()}-${design.id}`,
-                        name: design.name,
-                        type: 'blueprint',
-                        rarity: 'rare'
-                      });
-                      notify(`REMIXED: ${design.name}`);
-                    }}
-                    className="w-full py-2 bg-cannabis-light text-cannabis-dark font-bold rounded-xl text-[10px] uppercase tracking-widest"
-                  >
+                  <button className="w-full py-2 bg-cannabis-light text-cannabis-dark font-bold rounded-xl text-[10px] uppercase tracking-widest">
                     Remix Blueprint
                   </button>
                 </div>

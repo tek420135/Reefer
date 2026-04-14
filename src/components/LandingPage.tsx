@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Box, Layers, Globe, Cpu, ShoppingBag, Calendar, HelpCircle, Users, Mail, ShieldCheck, BookOpen, MessageSquare, Layout, Activity, Zap, Leaf, Code, Download, Smartphone, Terminal, Store, Brain, Printer } from 'lucide-react';
+import { Box, Layers, Globe, Cpu, ShoppingBag, Calendar, HelpCircle, Users, Mail, ShieldCheck, BookOpen, MessageSquare, Layout, Activity, Zap, Leaf, Code, Download, Smartphone, Terminal } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { useSocketContext } from '../context/SocketContext';
 
@@ -83,6 +83,8 @@ import SeedToSmokeFlow from './SeedToSmokeFlow';
 import NeuralHacking from './NeuralHacking';
 import TheVault from './TheVault';
 
+import AboutUs from './AboutUs';
+
 interface LandingPageProps {
   xp?: number;
   onInstall?: () => void;
@@ -97,7 +99,7 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
         title="THE SOCKET"
         subtitle="The Eco-Grid Sync"
         description="The world's first AI-powered, 3D-printed cannabis metaverse. We've digitized the wisdom of legends to automate your grow, design your gear, and sync your stash with the grid."
-        icon={<Globe size={120} />}
+        icon={<Leaf size={120} />}
         className="mt-0 relative overflow-hidden"
       >
         {/* Neural Background Accents */}
@@ -137,7 +139,7 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
         title="AI CONSULTANT"
         subtitle="Neural Eco-Expert"
         description="Meet your new head of cultivation. Our AI Consultant analyzes your grow space, optimizes your design, and provides real-time wisdom for the perfect sustainable harvest."
-        icon={<Brain size={120} />}
+        icon={<MessageSquare size={120} />}
       >
         <GanjaGuruChat />
       </Section>
@@ -180,10 +182,10 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
       {/* Design Studio Section */}
       <Section
         id="design-studio"
-        title="SOCIAL FORGE"
+        title="3D STUDIO"
         subtitle="3D Print on Demand"
         description="Design custom grow brackets, bongs, and stealth cabinets. We use 100% biodegradable hemp filament to print your vision on demand."
-        icon={<Printer size={120} />}
+        icon={<Box size={120} />}
       >
         <DesignStudio />
       </Section>
@@ -217,7 +219,7 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
         title="THE MARKET"
         subtitle="Eco-Friendly Marketplace"
         description="Sustainably sourced genetics and hardware. Every item in our market is verified for eco-impact and delivered via pinpoint drop."
-        icon={<Store size={120} />}
+        icon={<ShoppingBag size={120} />}
       >
         <Marketplace />
       </Section>
@@ -329,8 +331,8 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
           ))}
         </div>
       </Section>
-
-      {/* About Us Section */}
+      
+      {/* Dedicated About Us Section */}
       <Section
         id="about-us"
         title="THE ORIGIN"
@@ -338,21 +340,7 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
         description="We didn't just build a website. We built a grid. A collective of visionaries, hackers, and growers who believe the street deserves better tech."
         icon={<BookOpen size={120} />}
       >
-        <div className="max-w-3xl mx-auto text-left glass-morphism p-8 rounded-3xl border border-white/10">
-          <p className="text-lg leading-relaxed mb-6">
-            Born in the haze of a digital revolution, The Socket is the first AI-powered cannabis metaverse. We've combined the wisdom of legends with the raw power of artificial intelligence to create a seamless, end-to-end ecosystem.
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-              <h5 className="font-bold text-cannabis-light">VISION</h5>
-              <p className="text-xs text-white/60">To be the global switchboard for all things cannabis.</p>
-            </div>
-            <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-              <h5 className="font-bold text-money-gold">MISSION</h5>
-              <p className="text-xs text-white/60">Sustainable, automated, and community-driven innovation.</p>
-            </div>
-          </div>
-        </div>
+        <AboutUs />
       </Section>
 
       {/* Blog Section */}
@@ -381,31 +369,6 @@ export default function LandingPage({ xp = 1200, onInstall }: LandingPageProps) 
                 </div>
                 <h4 className="font-bold group-hover:text-money-gold transition-colors">{post.title}</h4>
               </div>
-            </div>
-          ))}
-        </div>
-      </Section>
-
-      {/* Team Section */}
-      <Section
-        id="team"
-        title="THE COUNCIL"
-        subtitle="Our Team"
-        description="The hackers and growers behind the grid."
-        icon={<Users size={120} />}
-      >
-        <div className="flex flex-wrap justify-center gap-8">
-          {[
-            { name: 'ARCHITECT', role: 'Lead Design', color: 'bg-cannabis-light' },
-            { name: 'THE_PLUG', role: 'Eco-Sourcing', color: 'bg-money-gold' },
-            { name: 'NEURAL_DEV', role: 'AI Engineering', color: 'bg-curiosity-purple' },
-          ].map((member, i) => (
-            <div key={i} className="flex flex-col items-center group">
-              <div className={`w-24 h-24 rounded-full ${member.color} mb-4 shadow-xl group-hover:scale-110 transition-transform flex items-center justify-center text-black font-black text-2xl`}>
-                {member.name[0]}
-              </div>
-              <h5 className="font-bold">{member.name}</h5>
-              <p className="text-[10px] font-mono text-white/40 uppercase">{member.role}</p>
             </div>
           ))}
         </div>

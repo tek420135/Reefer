@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 export default function SmokeCursor() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState<{ id: number; x: number; y: number }[]>([]);
+  const [particles, setParticles] = useState<{ id: string; x: number; y: number }[]>([]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -11,7 +11,7 @@ export default function SmokeCursor() {
       
       // Add new smoke particle
       const newParticle = {
-        id: Date.now(),
+        id: crypto.randomUUID(),
         x: e.clientX,
         y: e.clientY,
       };

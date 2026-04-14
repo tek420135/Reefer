@@ -1,8 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import confetti from 'canvas-confetti';
-import { auth, db, handleFirestoreError, OperationType } from '../firebase';
-import { onAuthStateChanged } from 'firebase/auth';
-import { doc, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 
 export type VibeType = 'willie' | 'snoop' | 'bruce';
 
@@ -55,69 +52,7 @@ export const useSocket = () => {
     };
   });
 
-  const [userId, setUserId] = useState<string | null>(null);
-  const isInitialMount = useRef(true);
-
-  // Auth Listener
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUserId(user?.uid || null);
-    });
-    return () => unsubscribe();
-  }, []);
-
-  // Firestore Sync: Load
-  useEffect(() => {
-    if (!userId) return;
-
-    const userDoc = doc(db, 'users', userId);
-    const unsubscribe = onSnapshot(userDoc, (snapshot) => {
-      if (snapshot.exists()) {
-        const data = snapshot.data();
-        setState(prev => ({
-          ...prev,
-          seeds: data.seeds ?? prev.seeds,
-          xp: data.xp ?? prev.xp,
-          vibe: data.vibe ?? prev.vibe,
-          inventory: data.inventory ?? prev.inventory
-        }));
-      } else {
-        // Initialize user doc if it doesn't exist
-        setDoc(userDoc, {
-          seeds: state.seeds,
-          xp: state.xp,
-          vibe: state.vibe,
-          inventory: state.inventory,
-          updatedAt: Date.now()
-        }).catch(err => handleFirestoreError(err, OperationType.CREATE, `users/${userId}`));
-      }
-    }, (err) => handleFirestoreError(err, OperationType.GET, `users/${userId}`));
-
-    return () => unsubscribe();
-  }, [userId]);
-
-  // Firestore Sync: Save (Debounced or on change)
-  useEffect(() => {
-    if (!userId || isInitialMount.current) {
-      isInitialMount.current = false;
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      const userDoc = doc(db, 'users', userId);
-      updateDoc(userDoc, {
-        seeds: state.seeds,
-        xp: state.xp,
-        vibe: state.vibe,
-        inventory: state.inventory,
-        updatedAt: Date.now()
-      }).catch(err => handleFirestoreError(err, OperationType.UPDATE, `users/${userId}`));
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [state.seeds, state.xp, state.vibe, state.inventory, userId]);
-
-  // Persist state to localStorage (as fallback)
+  // Persist state to localStorage
   useEffect(() => {
     const { seeds, xp, vibe, inventory } = state;
     localStorage.setItem('socket_state', JSON.stringify({ seeds, xp, vibe, inventory }));

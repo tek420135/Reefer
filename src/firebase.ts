@@ -70,10 +70,13 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
 // Connection Test
 export async function testConnection() {
   try {
+    console.log("Testing Firestore connection...");
     await getDoc(doc(db, 'test', 'connection'));
+    console.log("Firestore connection successful.");
   } catch (error) {
-    if(error instanceof Error && error.message.includes('the client is offline')) {
-      console.error("Please check your Firebase configuration. ");
+    console.error("Firestore connection test failed:", error);
+    if(error instanceof Error && (error.message.includes('the client is offline') || error.message.includes('Backend didn\'t respond'))) {
+      console.error("CRITICAL: Could not reach Cloud Firestore backend. Please check your Firebase configuration and internet connection.");
     }
   }
 }

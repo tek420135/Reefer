@@ -71,7 +71,7 @@ export default function GanjaGuruChat() {
     if (!input.trim() && !attachedFile) return;
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: crypto.randomUUID(),
       role: 'user',
       content: input,
       timestamp: Date.now(),
@@ -101,7 +101,7 @@ export default function GanjaGuruChat() {
     }
 
     const botMessage: Message = {
-      id: (Date.now() + 1).toString(),
+      id: crypto.randomUUID(),
       role: 'model',
       content: response,
       timestamp: Date.now(),

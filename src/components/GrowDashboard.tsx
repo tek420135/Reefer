@@ -34,7 +34,7 @@ export default function GrowDashboard() {
 
     const interval = setInterval(() => {
       const randomMsg = messages[Math.floor(Math.random() * messages.length)];
-      setEvents(prev => [{ id: Date.now().toString(), ...randomMsg }, ...prev.slice(0, 4)]);
+      setEvents(prev => [{ id: crypto.randomUUID(), ...randomMsg }, ...prev.slice(0, 4)]);
     }, 5000);
 
     return () => clearInterval(interval);
